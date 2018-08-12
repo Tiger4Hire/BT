@@ -1,7 +1,7 @@
 CC=gcc
 CXX=g++
 RM=rm -f
-CPPFLAGS=-g
+CPPFLAGS=-std=c++17 -ggdb
 LDFLAGS=-g
 LDLIBS=
 
@@ -10,8 +10,8 @@ OBJS=$(subst .cpp,.o,$(SRCS))
 
 all: tool
 
-tool: $(OBJS) std.h.gch
-
+tool: $(OBJS)
+	$(CXX) $(OBJS) -o tool
 std.h.gch: std.h
 	$(CXX) $(CPPFLAGS) std.h
 
@@ -23,6 +23,7 @@ depend: .depend
 
 clean:
 	$(RM) $(OBJS)
+	$(RM) std.h.gch
 
 distclean: clean
 	$(RM) *~ .depend
