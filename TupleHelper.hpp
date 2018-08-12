@@ -5,7 +5,7 @@ template <size_t I>
 struct visit_impl
 {
 	template <typename T, typename F>
-	static void visit(T& tup, size_t idx, F fun)
+	static void visit(T& tup, size_t idx, F&& fun)
 	{
 		if (idx == I - 1)
 			fun(std::get<I - 1>(tup));
@@ -18,7 +18,7 @@ template <>
 struct visit_impl<0>
 {
 	template <typename T, typename F>
-	static void visit(T& tup, size_t idx, F fun) { assert(false); }
+	static void visit(T&, size_t, F&&) { assert(false); }
 };
 
 template <typename F, typename... Ts>

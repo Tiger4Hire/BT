@@ -1,5 +1,5 @@
 #pragma once
-#include "BehaviorTree.h"
+#include "BehaviorTree.hpp"
 #include <gsl/gsl>
 #include <tuple>
 

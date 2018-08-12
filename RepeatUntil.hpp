@@ -1,5 +1,5 @@
 #pragma once
-#include "BehaviorTree.h"
+#include "BehaviorTree.hpp"
 
 template <class TargetObj, class Behavior>
 struct RepeatUntilFail

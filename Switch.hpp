@@ -1,6 +1,6 @@
 #pragma once
-#include "BehaviorTree.h"
-#include "Utils.h"
+#include "BehaviorTree.hpp"
+#include "Utils.hpp"
 #include <exception>
 #include <variant>
 

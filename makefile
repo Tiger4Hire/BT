@@ -1,19 +1,19 @@
 CC=gcc
-CXX=g++
+CXX=clang++
 RM=rm -f
-CPPFLAGS=-include std.h -std=c++17 -ggdb
+CPPFLAGS=-include std.hpp -std=c++17 -ggdb -Wall -Wextra
 LDFLAGS=-g
 LDLIBS=
 
 SRCS=$(wildcard *.cpp)
 OBJS=$(subst .cpp,.o,$(SRCS))
 
-all: std.h.gch tool
+all: std.hpp.gch tool
 
 tool: $(OBJS)
 	$(CXX) $(OBJS) -o tool
-std.h.gch: std.h
-	$(CXX) $(CPPFLAGS) std.h
+std.hpp.gch: std.hpp
+	$(CXX) $(CPPFLAGS) std.hpp
 
 depend: .depend
 
@@ -23,7 +23,7 @@ depend: .depend
 
 clean:
 	$(RM) $(OBJS)
-	$(RM) std.h.gch
+	$(RM) std.hpp.gch
 
 distclean: clean
 	$(RM) *~ .depend

@@ -1,8 +1,9 @@
-#include "RepeatUntil.h"
-#include "Sequence.h"
-#include "Switch.h"
-#include "TupleHelper.h"
-#include "std.h"
+#include "PushDown.hpp"
+#include "RepeatUntil.hpp"
+#include "Sequence.hpp"
+#include "Switch.hpp"
+#include "TupleHelper.hpp"
+#include "std.hpp"
 #include <gsl/gsl>
 using namespace std;
 
@@ -29,6 +30,7 @@ StateId Next(StateId id)
 	case Fail:
 		Expects(false);
 	}
+	return Fail;
 }
 
 struct Stuff
@@ -58,7 +60,7 @@ struct NextState
 
 struct State1
 {
-	void Undo(Stuff& stuff) {}
+	void Undo(Stuff&) {}
 	Progress Update(Stuff&)
 	{
 		cout << "State1\n";
@@ -68,7 +70,7 @@ struct State1
 
 struct State2
 {
-	void Undo(Stuff& stuff) {}
+	void Undo(Stuff&) {}
 	Progress Update(Stuff&)
 	{
 		cout << "State2\n";
@@ -78,7 +80,7 @@ struct State2
 
 struct State3
 {
-	void Undo(Stuff& stuff) {}
+	void Undo(Stuff&) {}
 	Progress Update(Stuff&)
 	{
 		cout << "State3\n";
@@ -92,8 +94,31 @@ struct FailFast
 	Progress Update(Stuff&) { return FAIL; }
 };
 
+class PDSAState;
+using MyPDSA = PDSA<Stuff, PDSAState>;
+
+class PDSAState
+{
+public:
+	void Undo(Stuff&) {}
+	Progress Update(MyPDSA& pdsa, Stuff& tgt)
+	{
+		cout << "PDSA State :" << tgt.m_state << "\n";
+		if (tgt.m_state != Fail)
+		{
+			pdsa.push<PDSAState>();
+			tgt.m_state = Next(tgt.m_state);
+			return PENDING;
+		}
+		else
+			return SUCCESS;
+	}
+};
+
 int main()
 {
+	BehaviorTree<Stuff, MyPDSA> behavior2;
+
 	using Seq1 = Sequence<Stuff, State1, State3>;
 	using MySwitch = Switch<Stuff, GetState, State1, State2, State3, Seq1, FailFast>;
 	using Seq2 = Sequence<Stuff, MySwitch, NextState>;
@@ -114,4 +139,5 @@ int main()
 	default:
 		Expects(false);
 	}
+	return 0;
 }

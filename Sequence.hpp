@@ -1,5 +1,5 @@
 #pragma once
-#include "BehaviorTree.h"
+#include "BehaviorTree.hpp"
 #include <tuple>
 
 /*
@@ -17,7 +17,7 @@ struct Sequence
 	{
 		auto undo_fn = [&tgt](auto& obj) { obj.Undo(tgt); };
 		for (size_t idx = m_index; m_index < NumStates(); --m_index)
-			visit_at(m_substates, m_index, undo_fn);
+			visit_at(m_substates, idx, undo_fn);
 	}
 	Progress Update(TargetObj& tgt)
 	{
@@ -35,6 +35,9 @@ struct Sequence
 			return FAIL;
 		case PENDING:
 			return PENDING;
+		default:
+			Expects(false);
 		}
+		return FAIL;
 	}
 };
