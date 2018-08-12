@@ -1,14 +1,14 @@
 CC=gcc
 CXX=g++
 RM=rm -f
-CPPFLAGS=-std=c++17 -ggdb
+CPPFLAGS=-include std.h -std=c++17 -ggdb
 LDFLAGS=-g
 LDLIBS=
 
 SRCS=$(wildcard *.cpp)
 OBJS=$(subst .cpp,.o,$(SRCS))
 
-all: tool
+all: std.h.gch tool
 
 tool: $(OBJS)
 	$(CXX) $(OBJS) -o tool
